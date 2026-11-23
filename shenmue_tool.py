@@ -5,9 +5,12 @@ from pathlib import Path
 from collections import Counter
 
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 # Cartella in cui si trova questo script (qui verranno creati da_tradurre.csv e italian_final.csv)
 BASE_DIR = Path(__file__).resolve().parent
 =======
+=======
+>>>>>>> Stashed changes
 # Rileva automaticamente la cartella in cui si trova questo script
 BASE_DIR = Path(__file__).resolve().parent
 INPUT_CSV = BASE_DIR / "english.0db084a7.csv"
@@ -18,9 +21,15 @@ OUTPUT_CSV = BASE_DIR / "italian_final.csv"
 LINE_RX = re.compile(rb'^"([^"]*)","([^"]*)","(.*)"\s*$')
 
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 # Byte reali 0xA1 0xF5 ('¡õ' in Latin-1)
 RAW_SEP_BYTES = b"\xa1\xf5"
 RAW_SEP_STR = RAW_SEP_BYTES.decode("latin1")
+=======
+# In Latin-1 (iso-8859-1) i byte 0xA1 0xF5 corrispondono ai caratteri '¡õ'
+RAW_SEP_BYTES = b"\xa1\xf5"
+RAW_SEP_STR = RAW_SEP_BYTES.decode("latin1")  # '¡õ'
+>>>>>>> Stashed changes
 =======
 # In Latin-1 (iso-8859-1) i byte 0xA1 0xF5 corrispondono ai caratteri '¡õ'
 RAW_SEP_BYTES = b"\xa1\xf5"
@@ -47,6 +56,7 @@ ACCENT_MAP = str.maketrans({
 })
 
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 def resolve_input_csv(arg_path: str | None) -> Path:
     # 1. Se passato da riga di comando, usa quel percorso esatto
     if arg_path:
@@ -72,6 +82,8 @@ def resolve_input_csv(arg_path: str | None) -> Path:
 
 =======
 >>>>>>> Stashed changes
+=======
+>>>>>>> Stashed changes
 def bytes_to_latin1_text(b: bytes) -> str:
     b = b.replace(b"\\xA1\\xF5", RAW_SEP_BYTES).replace(b"\\xa1\\xf5", RAW_SEP_BYTES)
     return b.decode("latin1")
@@ -88,9 +100,19 @@ def sanitize_italian(text: str) -> str:
                 .replace("\\xa1\\xf5", RAW_SEP_STR))
 
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
     text = re.sub(r"\s*" + re.escape(RAW_SEP_STR) + r"\s*", RAW_SEP_STR, text)
     text = re.sub(r"\$\s*(\d+(?:[.,]\d+)?)", r"\1$", text)
 
+=======
+    # Rimuove spazi superflui attorno ai byte 0xA1 0xF5 ('¡õ')
+    text = re.sub(r"\s*" + re.escape(RAW_SEP_STR) + r"\s*", RAW_SEP_STR, text)
+
+    # Simbolo $ sempre dopo il numero (es. $50 -> 50$)
+    text = re.sub(r"\$\s*(\d+(?:[.,]\d+)?)", r"\1$", text)
+
+    # Regola lessicale: banco -> bancarella
+>>>>>>> Stashed changes
 =======
     # Rimuove spazi superflui attorno ai byte 0xA1 0xF5 ('¡õ')
     text = re.sub(r"\s*" + re.escape(RAW_SEP_STR) + r"\s*", RAW_SEP_STR, text)
@@ -106,6 +128,10 @@ def sanitize_italian(text: str) -> str:
     text = re.sub(r"\bBanchi\b", "Bancarelle", text)
 
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+=======
+    # Evita virgolette doppie interne che romperebbero il CSV
+>>>>>>> Stashed changes
 =======
     # Evita virgolette doppie interne che romperebbero il CSV
 >>>>>>> Stashed changes
@@ -116,7 +142,20 @@ def text_to_exact_bytes(text: str) -> bytes:
     parts = text.split(RAW_SEP_STR)
     return RAW_SEP_BYTES.join(p.encode("utf-8") for p in parts)
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 =======
+=======
+
+def is_already_italian(text: str) -> bool:
+    clean = text.replace(RAW_SEP_STR, " ").replace("=@", "").strip()
+    if not clean:
+        return True
+    try:
+        clean_utf8 = clean.encode("latin1").decode("utf-8")
+    except (UnicodeEncodeError, UnicodeDecodeError):
+        clean_utf8 = clean
+    return bool(IT_RX.search(clean_utf8))
+>>>>>>> Stashed changes
 
 def is_already_italian(text: str) -> bool:
     clean = text.replace(RAW_SEP_STR, " ").replace("=@", "").strip()
@@ -146,7 +185,10 @@ def cmd_estrai(input_csv: Path):
 
     freq = Counter()
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 =======
+=======
+>>>>>>> Stashed changes
 
 >>>>>>> Stashed changes
     for line in raw.splitlines():
@@ -165,8 +207,13 @@ def cmd_estrai(input_csv: Path):
             writer.writerow([count, norm_text, ""])
 
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
     print(f"File sorgente letto: {input_csv}")
     print(f"OK -> Creato {WORK_CSV}")
+=======
+    print(f"Cartella di lavoro: {BASE_DIR}")
+    print(f"OK -> Creato {WORK_CSV.name} (3 colonne: Frequenza, Originale_EN, Traduzione_IT)")
+>>>>>>> Stashed changes
     print(f"Stringhe uniche estratte: {len(freq)} (coprono {sum(freq.values())} righe nel CSV originale).")
 
 def cmd_applica(input_csv: Path):
@@ -179,6 +226,9 @@ def cmd_applica():
     if not INPUT_CSV.exists():
         print(f"Errore: file originale non trovato in {INPUT_CSV}")
         sys.exit(1)
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
     if not WORK_CSV.exists():
         print(f"Errore: compila prima {WORK_CSV}")
@@ -236,8 +286,13 @@ def cmd_applica():
         f.write(b"\n".join(out_lines) + b"\n")
 
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
     print(f"File sorgente letto: {input_csv}")
     print(f"OK -> Creato {OUTPUT_CSV}")
+=======
+    print(f"Cartella di lavoro: {BASE_DIR}")
+    print(f"OK -> Creato {OUTPUT_CSV.name}")
+>>>>>>> Stashed changes
 =======
     print(f"Cartella di lavoro: {BASE_DIR}")
     print(f"OK -> Creato {OUTPUT_CSV.name}")
