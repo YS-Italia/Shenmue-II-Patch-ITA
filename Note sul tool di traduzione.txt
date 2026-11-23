@@ -1,0 +1,13 @@
+Lo script ragiona nel seguente modo: tramite un terminale 
+aperto nella cartella dove è presente lo script tramite il comando: python3 shenmue_tool.py applica
+lo script ripristina i file ripetizione e li riposiziona nel luogo originale del file english.0db084a7
+a quel punto crea un nuovo file temporaneo in cui la traduzione è completa.
+tramite esso si può valutare lo stato del progetto. 
+
+la formattazione del file da_tradurre è questa: "Frequenza", "Esempio_ID", "Originale_EN", "Traduzione_IT"
+l'italiano va sempre accanto l'inglese. Le virgolette per l'italiano sono già presenti, non vanno quindi aggiunte. 
+esempio id è solo indicativo, serve allo script solo come segnaposto per ricordarsi dove va messa la riga in italiano.
+la riga Frequenza indica solo quante volte un determinato passaggio viene ripetuto nel file english.0db084a7. la Frequenza è in ordine ascendente
+
+-- tramite comando: python3 shenmue_tool.py estrai 
+lo script estree gli elementi ripetuti nel file inglese e li posiziona nel file da_tradurre.csv
